@@ -66,5 +66,12 @@
     ]
   },
   "Weapon": {},
-  "ItemSoundSetId": "ISS_Weapons_Wood"
+  "ItemSoundSetId": "ISS_Weapons_Wood",
+  "InteractionConfig": {
+    "AllEntities": true,
+    "UseDistance": {
+      "Adventure": 128,
+      "Creative": 128
+    }
+  }
 }

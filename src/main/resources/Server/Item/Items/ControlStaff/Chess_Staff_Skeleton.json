@@ -76,5 +76,12 @@
   "Interactions": {
     "Primary": "ChessPiece_Control",
     "Secondary": "ChessPiece_Control"
+  },
+  "InteractionConfig": {
+    "AllEntities": true,
+    "UseDistance": {
+      "Adventure": 128,
+      "Creative": 128
+    }
   }
 }
