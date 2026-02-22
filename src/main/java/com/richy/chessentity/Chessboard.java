@@ -62,7 +62,7 @@ public class Chessboard {
         holder.addComponent(ModelComponent.getComponentType(), new ModelComponent(model));
         holder.addComponent(BoundingBox.getComponentType(), new BoundingBox(model.getBoundingBox()));
         holder.addComponent(NetworkId.getComponentType(), new NetworkId(store.getExternalData().takeNextNetworkId()));
-        holder.addComponent(Interactions.getComponentType(), new Interactions()); // you need to add interactions here if you want your entity to be interactable
+        //holder.addComponent(Interactions.getComponentType(), new Interactions()); // you need to add interactions here if you want your entity to be interactable
 
         holder.ensureComponent(UUIDComponent.getComponentType());
         holder.ensureComponent(Interactable.getComponentType()); // if you want your entity to be interactable
