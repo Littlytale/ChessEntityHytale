@@ -29,7 +29,7 @@ public class ChessPlugin extends JavaPlugin {
                 LockedTargetDamageInteraction.CODEC
         );
 
-        //getCommandRegistry().registerCommand(new ChessboardCommand());
+        getCommandRegistry().registerCommand(new ChessboardCommand());
     }
 
     @Override
