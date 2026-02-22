@@ -17,6 +17,19 @@ public class ChessPlugin extends JavaPlugin {
     @Override
     protected void setup() {
         getLogger().at(Level.INFO).log("ExamplePlugin setup...");
+
+        getCodecRegistry(Interaction.CODEC)
+                .register("ChessPieceControl",
+                        ChessPieceControl.class,
+                        ChessPieceControl.CODEC);
+
+        getCodecRegistry(Interaction.CODEC).register(
+                "chessplugin:lockedtarget_damage",
+                LockedTargetDamageInteraction.class,
+                LockedTargetDamageInteraction.CODEC
+        );
+
+        //getCommandRegistry().registerCommand(new ChessboardCommand());
     }
 
     @Override
