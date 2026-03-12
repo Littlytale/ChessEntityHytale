@@ -19,6 +19,8 @@ import com.hypixel.hytale.server.core.modules.interaction.Interactions;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
+import com.hypixel.hytale.server.npc.NPCPlugin;
+import com.hypixel.hytale.server.npc.role.Role;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -43,34 +45,49 @@ public class Chessboard {
         this.world = world;
         this.store = world.getEntityStore().getStore();
         this.playerRef = playerRef;
-        this.pos1 = pos1;
+        this.pos1 = new Vector3d(Math.ceil(pos1.x) - 0.5, pos1.y, Math.ceil(pos1.z) - 0.5);
         this.pos2 = pos2;
 
         setup();
     }
 
     public void setup(){
-        // Spawning Mannequin pieces
-        Holder<EntityStore> holder = EntityStore.REGISTRY.newHolder();
-        ModelAsset modelAsset = ModelAsset.getAssetMap().getAsset("Pig");
-        Model model = Model.createScaledModel(modelAsset, 1.0f);
-        TransformComponent transform = store.getComponent(playerRef.getReference(), EntityModule.get().getTransformComponentType());
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Rook", null, Vector3d.add(pos1, new Vector3d(0, 0, 0)), Vector3f.ZERO);
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Knight", null, Vector3d.add(pos1, new Vector3d(1, 0, 0)), Vector3f.ZERO);
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Bishop", null, Vector3d.add(pos1, new Vector3d(2, 0, 0)), Vector3f.ZERO);
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Queen", null, Vector3d.add(pos1, new Vector3d(3, 0, 0)), Vector3f.ZERO);
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_King", null, Vector3d.add(pos1, new Vector3d(4, 0, 0)), Vector3f.ZERO);
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Bishop", null, Vector3d.add(pos1, new Vector3d(5, 0, 0)), Vector3f.ZERO);
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Knight", null, Vector3d.add(pos1, new Vector3d(6, 0, 0)), Vector3f.ZERO);
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Rook", null, Vector3d.add(pos1, new Vector3d(7, 0, 0)), Vector3f.ZERO);
 
-        // Add all components to new Entity
-        holder.addComponent(TransformComponent.getComponentType(), new TransformComponent(Vector3d.add(pos1, new Vector3d(0, 1, 0)), new Vector3f(0, 0, 0)));
-        holder.addComponent(PersistentModel.getComponentType(), new PersistentModel(model.toReference()));
-        holder.addComponent(ModelComponent.getComponentType(), new ModelComponent(model));
-        holder.addComponent(BoundingBox.getComponentType(), new BoundingBox(model.getBoundingBox()));
-        holder.addComponent(NetworkId.getComponentType(), new NetworkId(store.getExternalData().takeNextNetworkId()));
-        //holder.addComponent(Interactions.getComponentType(), new Interactions()); // you need to add interactions here if you want your entity to be interactable
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(0, 0, -1)), Vector3f.ZERO);
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(1, 0, -1)), Vector3f.ZERO);
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(2, 0, -1)), Vector3f.ZERO);
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(3, 0, -1)), Vector3f.ZERO);
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(4, 0, -1)), Vector3f.ZERO);
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(5, 0, -1)), Vector3f.ZERO);
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(6, 0, -1)), Vector3f.ZERO);
+        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(7, 0, -1)), Vector3f.ZERO);
 
-        holder.ensureComponent(UUIDComponent.getComponentType());
-        holder.ensureComponent(Interactable.getComponentType()); // if you want your entity to be interactable
 
-        // Finally Spawning the Entity
-        world.execute(() -> {
-            store.addEntity(holder, AddReason.SPAWN);
-        });
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Rook", null, Vector3d.add(pos1, new Vector3d(0, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Knight", null, Vector3d.add(pos1, new Vector3d(1, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Bishop", null, Vector3d.add(pos1, new Vector3d(2, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Queen", null, Vector3d.add(pos1, new Vector3d(3, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_King", null, Vector3d.add(pos1, new Vector3d(4, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Bishop", null, Vector3d.add(pos1, new Vector3d(5, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Knight", null, Vector3d.add(pos1, new Vector3d(6, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Rook", null, Vector3d.add(pos1, new Vector3d(7, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(0, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(1, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(2, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(3, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(4, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(5, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(6, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(7, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
     }
 
     public void clear(){
