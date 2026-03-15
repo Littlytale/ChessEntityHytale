@@ -50,7 +50,6 @@ public class LockedTargetDamageInteraction extends SimpleInstantInteraction{
             @Nonnull CooldownHandler cooldownHandler
     ){
 
-        getLogger().at(Level.INFO).log("Entity attack an entity!");
 
         CommandBuffer<EntityStore> commandBuffer = ctx.getCommandBuffer();
 
