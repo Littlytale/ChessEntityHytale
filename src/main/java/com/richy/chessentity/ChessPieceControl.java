@@ -4,12 +4,14 @@ import com.hypixel.hytale.codec.builder.BuilderCodec;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.protocol.BlockPosition;
+import com.hypixel.hytale.protocol.ChangeVelocityType;
 import com.hypixel.hytale.protocol.InteractionType;
 import com.hypixel.hytale.server.core.entity.InteractionContext;
 import com.hypixel.hytale.server.core.entity.UUIDComponent;
 import com.hypixel.hytale.server.core.modules.entity.component.TransformComponent;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.CooldownHandler;
 import com.hypixel.hytale.server.core.modules.interaction.interaction.config.SimpleInstantInteraction;
+import com.hypixel.hytale.server.core.modules.physics.component.Velocity;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.entities.NPCEntity;
 import java.util.Map;
@@ -49,6 +51,11 @@ class ChessPieceControl extends SimpleInstantInteraction {
             if (interactionType.getValue() == InteractionType.Secondary.getValue()) {
 
                 selectedEntity.put(playerUUID, targetEntityRef);
+
+                // Lässt den NPC ein wenig hochfliegen, wenn es ausgewählt wird
+                Velocity velocity = targetEntityRef.getStore().getComponent(targetEntityRef, Velocity.getComponentType());
+                velocity.
+                velocity.addInstruction(new Vector3d(0, 5, 0), null, ChangeVelocityType.Add);
 
                 return;
             } else if (interactionType.getValue() == InteractionType.Primary.getValue() && targetEntityRef != selectedEntity.get(playerUUID)) {
