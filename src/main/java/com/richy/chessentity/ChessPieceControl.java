@@ -54,7 +54,6 @@ class ChessPieceControl extends SimpleInstantInteraction {
 
                 // Lässt den NPC ein wenig hochfliegen, wenn es ausgewählt wird
                 Velocity velocity = targetEntityRef.getStore().getComponent(targetEntityRef, Velocity.getComponentType());
-                velocity.
                 velocity.addInstruction(new Vector3d(0, 5, 0), null, ChangeVelocityType.Add);
 
                 return;
