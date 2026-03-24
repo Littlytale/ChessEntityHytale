@@ -1,29 +1,20 @@
 package com.richy.chessentity;
 
-import com.hypixel.hytale.component.AddReason;
-import com.hypixel.hytale.component.Holder;
 import com.hypixel.hytale.component.Ref;
 import com.hypixel.hytale.component.Store;
 import com.hypixel.hytale.math.vector.Vector2d;
 import com.hypixel.hytale.math.vector.Vector3d;
 import com.hypixel.hytale.math.vector.Vector3f;
-import com.hypixel.hytale.server.core.asset.type.model.config.Model;
-import com.hypixel.hytale.server.core.asset.type.model.config.ModelAsset;
-import com.hypixel.hytale.server.core.entity.Entity;
-import com.hypixel.hytale.server.core.entity.UUIDComponent;
-import com.hypixel.hytale.server.core.event.events.entity.EntityRemoveEvent;
-import com.hypixel.hytale.server.core.modules.entity.EntityModule;
 import com.hypixel.hytale.server.core.modules.entity.component.*;
-import com.hypixel.hytale.server.core.modules.entity.tracker.NetworkId;
-import com.hypixel.hytale.server.core.modules.interaction.Interactions;
 import com.hypixel.hytale.server.core.universe.PlayerRef;
 import com.hypixel.hytale.server.core.universe.world.World;
 import com.hypixel.hytale.server.core.universe.world.storage.EntityStore;
 import com.hypixel.hytale.server.npc.NPCPlugin;
-import com.hypixel.hytale.server.npc.role.Role;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 
 public class Chessboard {
 
@@ -36,6 +27,7 @@ public class Chessboard {
     public PlayerRef playerRef;
 
     // Chess pieces and the positons
+    Map<Vector3d, String> chessboardsList;
     Map<Vector2d, Ref<EntityStore>> chessboardOccupancy;
 
     // Even = White turn; Odd = Black turn
@@ -52,42 +44,33 @@ public class Chessboard {
     }
 
     public void setup(){
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Rook", null, Vector3d.add(pos1, new Vector3d(0, 0, 0)), Vector3f.ZERO);
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Knight", null, Vector3d.add(pos1, new Vector3d(1, 0, 0)), Vector3f.ZERO);
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Bishop", null, Vector3d.add(pos1, new Vector3d(2, 0, 0)), Vector3f.ZERO);
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Queen", null, Vector3d.add(pos1, new Vector3d(3, 0, 0)), Vector3f.ZERO);
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_King", null, Vector3d.add(pos1, new Vector3d(4, 0, 0)), Vector3f.ZERO);
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Bishop", null, Vector3d.add(pos1, new Vector3d(5, 0, 0)), Vector3f.ZERO);
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Knight", null, Vector3d.add(pos1, new Vector3d(6, 0, 0)), Vector3f.ZERO);
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Rook", null, Vector3d.add(pos1, new Vector3d(7, 0, 0)), Vector3f.ZERO);
+        spawnChessPiece("Piece_Mannequin_Rook"  , getChessFieldGlobalPos(new Vector2d(0, 0)), 0);
+        spawnChessPiece("Piece_Mannequin_Knight", getChessFieldGlobalPos(new Vector2d(1, 0)), 0);
+        spawnChessPiece("Piece_Mannequin_Bishop", getChessFieldGlobalPos(new Vector2d(2, 0)), 0);
+        spawnChessPiece("Piece_Mannequin_Queen" , getChessFieldGlobalPos(new Vector2d(3, 0)), 0);
+        spawnChessPiece("Piece_Mannequin_King"  , getChessFieldGlobalPos(new Vector2d(4, 0)), 0);
+        spawnChessPiece("Piece_Mannequin_Bishop", getChessFieldGlobalPos(new Vector2d(5, 0)), 0);
+        spawnChessPiece("Piece_Mannequin_Knight", getChessFieldGlobalPos(new Vector2d(6, 0)), 0);
+        spawnChessPiece("Piece_Mannequin_Rook"  , getChessFieldGlobalPos(new Vector2d(7, 0)), 0);
 
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(0, 0, -1)), Vector3f.ZERO);
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(1, 0, -1)), Vector3f.ZERO);
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(2, 0, -1)), Vector3f.ZERO);
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(3, 0, -1)), Vector3f.ZERO);
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(4, 0, -1)), Vector3f.ZERO);
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(5, 0, -1)), Vector3f.ZERO);
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(6, 0, -1)), Vector3f.ZERO);
-        NPCPlugin.get().spawnNPC(store, "Piece_Mannequin_Pawn", null, Vector3d.add(pos1, new Vector3d(7, 0, -1)), Vector3f.ZERO);
+        for (int i = 0; i < 8; i++){
+            spawnChessPiece("Piece_Mannequin_Pawn", getChessFieldGlobalPos(new Vector2d(i, -1)), 0);
+        }
 
 
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Rook", null, Vector3d.add(pos1, new Vector3d(0, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Knight", null, Vector3d.add(pos1, new Vector3d(1, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Bishop", null, Vector3d.add(pos1, new Vector3d(2, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Queen", null, Vector3d.add(pos1, new Vector3d(3, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_King", null, Vector3d.add(pos1, new Vector3d(4, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Bishop", null, Vector3d.add(pos1, new Vector3d(5, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Knight", null, Vector3d.add(pos1, new Vector3d(6, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Rook", null, Vector3d.add(pos1, new Vector3d(7, 0, -7)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        spawnChessPiece("Piece_Skeleton_Rook"  , getChessFieldGlobalPos(new Vector2d(0, -7)), 180);
+        spawnChessPiece("Piece_Skeleton_Knight", getChessFieldGlobalPos(new Vector2d(1, -7)), 180);
+        spawnChessPiece("Piece_Skeleton_Bishop", getChessFieldGlobalPos(new Vector2d(2, -7)), 180);
+        spawnChessPiece("Piece_Skeleton_Queen" , getChessFieldGlobalPos(new Vector2d(3, -7)), 180);
+        spawnChessPiece("Piece_Skeleton_King"  , getChessFieldGlobalPos(new Vector2d(4, -7)), 180);
+        spawnChessPiece("Piece_Skeleton_Bishop", getChessFieldGlobalPos(new Vector2d(5, -7)), 180);
+        spawnChessPiece("Piece_Skeleton_Knight", getChessFieldGlobalPos(new Vector2d(6, -7)), 180);
+        spawnChessPiece("Piece_Skeleton_Rook"  , getChessFieldGlobalPos(new Vector2d(7, -7)), 180);
 
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(0, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(1, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(2, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(3, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(4, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(5, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(6, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
-        NPCPlugin.get().spawnNPC(store, "Piece_Skeleton_Pawn", null, Vector3d.add(pos1, new Vector3d(7, 0, -6)), new Vector3f(0f, (float)Math.toRadians(180), 0f));
+        for (int i = 0; i < 8; i++){
+            spawnChessPiece("Piece_Skeleton_Pawn", getChessFieldGlobalPos(new Vector2d(i, -6)), 180);
+        }
+
     }
 
     public void clear(){
@@ -97,5 +80,19 @@ public class Chessboard {
     public void reset(){
         clear();
         setup();
+    }
+
+    // Spawn a new Chess Piece
+    private Ref<EntityStore> spawnChessPiece(String npcName, Vector3d position, float rotationDeg){
+
+        Vector3f rotationRad = new Vector3f(0f, (float)Math.toRadians(rotationDeg), 0f);
+        Ref<EntityStore> npc = Objects.requireNonNull(NPCPlugin.get().spawnNPC(store, npcName, null, position, rotationRad)).key();
+
+        return npc;
+    }
+
+    // Return global position from a chess field
+    private Vector3d getChessFieldGlobalPos(Vector2d chessField){
+        return Vector3d.add(pos1, new Vector3d(chessField.x, 0, chessField.y));
     }
 }
