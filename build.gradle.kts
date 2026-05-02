@@ -17,6 +17,8 @@ repositories {
 dependencies {
     compileOnly(libs.jetbrains.annotations)
     compileOnly(libs.jspecify)
+
+    implementation("tools.jackson.core:jackson-databind:3.1.0")
 }
 
 hytale {
